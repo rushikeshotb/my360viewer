@@ -45,8 +45,37 @@
       </a-assets>
 
       <a-videosphere src="#video360" rotation="0 -90 0"></a-videosphere>
-      <a-entity camera look-controls wasd-controls="enabled: false" position="0 1.6 0"></a-entity>
+
+      <a-entity camera
+                look-controls="touchEnabled: true; magicWindowTrackingEnabled: true"
+                wasd-controls="enabled: false"
+                position="0 1.6 0">
+      </a-entity>
     </a-scene>
   </div>
+
+  <script>
+    // Try to auto-play the video
+    document.addEventListener('DOMContentLoaded', function () {
+      var vid = document.getElementById('video360');
+      vid.play().catch(err => {
+        console.warn('Autoplay blocked. Wait for user gesture.');
+      });
+    });
+
+    // iOS gyroscope permissions
+    window.addEventListener("click", function () {
+      if (typeof DeviceMotionEvent !== "undefined" &&
+          typeof DeviceMotionEvent.requestPermission === "function") {
+        DeviceMotionEvent.requestPermission()
+          .then(response => {
+            if (response === "granted") {
+              console.log("Motion access granted");
+            }
+          })
+          .catch(console.error);
+      }
+    });
+  </script>
 </body>
 </html>
